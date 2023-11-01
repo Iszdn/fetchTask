@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Films</title>
+    <style>
+      .card {
+        display: inline-block;
+        background-color: rgb(249, 248, 246);
+        width: 28%;
+        margin: 10px;
+        border: 1px solid #5b5b5b;
+        padding: 10px;
+        box-shadow: 0px 2px 4px #5e5d5d;
+        transition: all 900ms;
+      }
+      .card:hover{
+       transform: scale(0.9);
+       
+      }
+      .card img {
+        max-width: 100%;
+        height: auto;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="films"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script>
+        // fetch axios
+      async function fetchData() {
+        try {
+          const response = await axios("https://api.tvmaze.com/shows");
+          const shows = response.data;
+
+          const films = document.getElementById("films");
+
+          shows.forEach((show) => {
+            const card = createFilmCard(show);
+            films.appendChild(card);
+          });
+        } catch (error) {
+          console.error("Error:", error);
+        }
+      }
+// cartlari yaradiriq
+      function createFilmCard(show) {
+        const card = document.createElement("div");
+        card.classList.add("card");
+
+        const image = document.createElement("img");
+        image.src = show.image.medium;
+
+        const title = document.createElement("h2");
+        title.textContent = `Film name: ${show.name}`;
+
+        const language = document.createElement("p");
+        language.textContent = `Language: ${show.language}`;
+
+        const rating = document.createElement("p");
+        rating.textContent = `Rating: ${show.rating.average}`;
+
+        card.append(image, title, language, rating);
+
+        return card;
+      }
+
+      fetchData();
+    </script>
+  </body>
+</html>
